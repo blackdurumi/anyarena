@@ -12,15 +12,14 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "account")
 @Builder
 @AllArgsConstructor
-public class User extends BaseEntity {
+public class Account extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "userId")
-    private Long userId;
+    private Long accountId;
 
     @Column(name = "identity")
     private String identity;
