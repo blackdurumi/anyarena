@@ -21,7 +21,7 @@ public class Account extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountId;
 
-    @Column(name = "identity")
+    @Column(name = "identity", unique = true)
     private String identity;
 
     @Column(name = "password")
