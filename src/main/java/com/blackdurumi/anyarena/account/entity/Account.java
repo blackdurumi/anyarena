@@ -24,8 +24,8 @@ public class Account extends BaseEntity {
     @Column(name = "identity", unique = true)
     private String identity;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "encryptedPassword")
+    private String encryptedPassword;
 
     @Column(name = "name")
     private String name;
