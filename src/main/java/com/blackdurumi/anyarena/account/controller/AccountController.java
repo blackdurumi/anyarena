@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/account")
 public class AccountController {
 
     @Autowired
@@ -23,4 +23,6 @@ public class AccountController {
     public ResponseEntity<Account> signUp(@RequestBody SignUpRequest request) {
         return ResponseEntity.ok(accountApplication.signUp(request));
     }
+
+
 }
