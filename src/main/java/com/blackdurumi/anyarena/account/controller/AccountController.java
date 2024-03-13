@@ -1,6 +1,7 @@
 package com.blackdurumi.anyarena.account.controller;
 
 import com.blackdurumi.anyarena.account.application.AccountApplication;
+import com.blackdurumi.anyarena.account.dto.SignInRequest;
 import com.blackdurumi.anyarena.account.dto.SignUpRequest;
 import com.blackdurumi.anyarena.account.entity.Account;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,8 @@ public class AccountController {
         return ResponseEntity.ok(accountApplication.signUp(request));
     }
 
-
+    @PostMapping("/sign-in")
+    public ResponseEntity<Account> signIn(@RequestBody SignInRequest request) {
+        return ResponseEntity.ok(accountApplication.signIn(request));
+    }
 }

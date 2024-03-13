@@ -8,12 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @Table(name = "account")
 @Builder
+@Getter
 @AllArgsConstructor
 public class Account extends BaseEntity {
 
