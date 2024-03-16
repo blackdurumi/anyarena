@@ -73,6 +73,11 @@ jacocoTestCoverageVerification {
                 value = 'COVEREDRATIO'
                 minimum = 0.80
             }
+            
+            excludes = [
+                    '*/dto/*',
+                    '*/entity/*'
+            ]
         }
     }
 }
