@@ -3,11 +3,11 @@ package com.blackdurumi.anyarena.post.controller;
 import com.blackdurumi.anyarena.post.application.PostApplication;
 import com.blackdurumi.anyarena.post.dto.PostCreationRequest;
 import com.blackdurumi.anyarena.post.dto.PostDto;
-import javax.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,12 +26,12 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDto> viewPost(@PathParam("postId") Long postId) {
+    public ResponseEntity<PostDto> viewPost(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(postApplication.viewPost(postId));
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<String> deletePost(@PathParam("postId") Long postId) {
+    public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(postApplication.deletePost(postId));
     }
 }
