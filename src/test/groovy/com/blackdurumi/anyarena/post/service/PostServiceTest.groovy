@@ -1,7 +1,6 @@
 package com.blackdurumi.anyarena.post.service
 
 import com.blackdurumi.anyarena.account.entity.Account
-import com.blackdurumi.anyarena.account.service.AccountService
 import com.blackdurumi.anyarena.post.dao.PostRepository
 import com.blackdurumi.anyarena.post.dto.PostCreationRequest
 import com.blackdurumi.anyarena.post.entity.Post
@@ -11,12 +10,10 @@ class PostServiceTest extends Specification {
     PostService sut
 
     PostRepository postRepository = Mock()
-    AccountService accountService = Mock()
 
     void setup() {
         sut = new PostService(
                 postRepository,
-                accountService,
         )
     }
 
@@ -41,11 +38,10 @@ class PostServiceTest extends Specification {
 
     def "CreatePost"() {
         when:
-        def result = sut.createPost(creationRequest)
+        def result = sut.createPost(creationRequest, account)
 
         then:
         noExceptionThrown()
-        1 * accountService.getById(accountId) >> account
         1 * postRepository.save(_) >> post
         result.getTitle() == title
         result.getContent() == content
@@ -92,5 +88,16 @@ class PostServiceTest extends Specification {
         1 * postRepository.findById(newPostId) >> Optional.of(newPost)
         1 * postRepository.save(_) >> newPost
         result == 101L
+    }
+
+    def "DeletePost"() {
+        when:
+        def result = sut.deletePost(postId)
+
+        then:
+        noExceptionThrown()
+        1 * postRepository.findById(postId) >> Optional.of(post)
+        1 * postRepository.delete(post)
+        result == "success to delete post with postId: " + postId;
     }
 }
