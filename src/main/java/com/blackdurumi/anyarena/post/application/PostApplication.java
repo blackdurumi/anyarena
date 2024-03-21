@@ -30,4 +30,8 @@ public class PostApplication {
     public String deletePost(Long postId) {
         return postService.deletePost(postId);
     }
+
+    public PostDto updatePost(Long postId, PostCreationRequest request) {
+        return postService.updatePost(postId, request);
+    }
 }

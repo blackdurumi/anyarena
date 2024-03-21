@@ -51,4 +51,11 @@ public class PostService {
         log.info(successMessage);
         return successMessage;
     }
+
+    public PostDto updatePost(Long postId, PostCreationRequest request) {
+        Post post = getPost(postId);
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        return PostDto.fromEntity(postRepository.save(post));
+    }
 }

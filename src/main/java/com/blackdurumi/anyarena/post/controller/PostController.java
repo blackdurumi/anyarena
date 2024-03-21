@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,5 +34,11 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(postApplication.deletePost(postId));
+    }
+
+    @PatchMapping("/{postId}")
+    public ResponseEntity<PostDto> updatePost(
+        @PathVariable("postId") Long postId, @RequestBody PostCreationRequest request) {
+        return ResponseEntity.ok(postApplication.updatePost(postId, request));
     }
 }

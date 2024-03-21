@@ -100,4 +100,29 @@ class PostServiceTest extends Specification {
         1 * postRepository.delete(post)
         result == "success to delete post with postId: " + postId;
     }
+
+    def "UpdatePost"() {
+        given:
+        def newTitle = "new title"
+        def newContent = "new content"
+        def newPost = Post.builder()
+                .title(newTitle)
+                .content(newContent)
+                .build()
+        def modificationRequest = PostCreationRequest.builder()
+                .title(newTitle)
+                .content(newContent)
+                .posterId(accountId)
+                .build()
+
+        when:
+        def result = sut.updatePost(postId, modificationRequest)
+
+        then:
+        noExceptionThrown()
+        1 * postRepository.findById(postId) >> Optional.of(post)
+        1 * postRepository.save(_) >> newPost
+        result.getTitle() == newTitle
+        result.getContent() == newContent
+    }
 }

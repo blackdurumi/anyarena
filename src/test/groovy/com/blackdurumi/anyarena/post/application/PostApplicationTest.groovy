@@ -60,4 +60,29 @@ class PostApplicationTest extends Specification {
         result.getTitle() == title
         result.getContent() == content
     }
+
+    def "UpdatePost"() {
+        given:
+        sut.createPost(creationRequest)
+        def newTitle = "new title"
+        def newContent = "new content"
+        def newPostDto = PostDto.builder()
+                .title(newTitle)
+                .content(newContent)
+                .build()
+        def modificationRequest = PostCreationRequest.builder()
+                .title(newTitle)
+                .content(newContent)
+                .posterId(posterId)
+                .build()
+
+        when:
+        def result = sut.updatePost(postId, modificationRequest)
+
+        then:
+        noExceptionThrown()
+        1 * postService.updatePost(postId, modificationRequest) >> newPostDto
+        result.getTitle() == newTitle
+        result.getContent() == newContent
+    }
 }
