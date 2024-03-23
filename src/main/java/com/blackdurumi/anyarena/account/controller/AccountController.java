@@ -7,9 +7,11 @@ import com.blackdurumi.anyarena.account.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,5 +30,10 @@ public class AccountController {
     @PostMapping("/sign-in")
     public ResponseEntity<Account> signIn(@RequestBody SignInRequest request) {
         return ResponseEntity.ok(accountApplication.signIn(request));
+    }
+
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteAccount(@RequestParam("accountId") Long accountId) {
+        return ResponseEntity.ok(accountApplication.deleteAccount(accountId));
     }
 }

@@ -28,4 +28,8 @@ public class AccountApplication {
 
         return account;
     }
+
+    public String deleteAccount(Long accountId) {
+        return accountService.deleteAccount(accountId);
+    }
 }
