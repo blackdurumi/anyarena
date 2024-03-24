@@ -43,7 +43,7 @@ public class PostApplication {
 
     @Transactional
     public String likeOrCancelPost(Long userId, Long postId) {
-        List<Account> likers = postService.getPostLikers(postId).getLikers();
+        List<Account> likers = postService.getPostLikerEntities(postId);
         Account user = accountService.getById(userId);
 
         if (likers.contains(user)) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,12 +49,7 @@ public class Post extends BaseEntity {
     @Column(name = "views", nullable = false)
     private Long views = 0L;
 
-    @Builder.Default
-    @ColumnDefault("0")
-    @Column(name = "likes", nullable = false)
-    private Long likes = 0L;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_liker",
         joinColumns = @JoinColumn(name = "postId"),
         inverseJoinColumns = @JoinColumn(name = "accountId"))

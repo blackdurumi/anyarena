@@ -4,8 +4,11 @@ import com.blackdurumi.anyarena.account.entity.Account;
 import com.blackdurumi.anyarena.post.dao.PostRepository;
 import com.blackdurumi.anyarena.post.dto.PostCreationRequest;
 import com.blackdurumi.anyarena.post.dto.PostDto;
+import com.blackdurumi.anyarena.post.dto.PostLikerDto;
 import com.blackdurumi.anyarena.post.dto.PostLikersDto;
 import com.blackdurumi.anyarena.post.entity.Post;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,8 +66,14 @@ public class PostService {
     public PostLikersDto getPostLikers(Long postId) {
         Post post = getPost(postId);
         return PostLikersDto.builder()
-            .likers(post.getLikers())
+            .likers(getPostLikerEntities(postId).stream().map(PostLikerDto::fromEntity)
+                .collect(Collectors.toList()))
             .build();
+    }
+
+    public List<Account> getPostLikerEntities(Long postId) {
+        Post post = getPost(postId);
+        return post.getLikers();
     }
 
     public String likePost(Account account, Long postId) {
