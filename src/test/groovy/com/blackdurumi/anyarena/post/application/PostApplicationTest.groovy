@@ -4,6 +4,8 @@ import com.blackdurumi.anyarena.account.entity.Account
 import com.blackdurumi.anyarena.account.service.AccountService
 import com.blackdurumi.anyarena.post.dto.PostCreationRequest
 import com.blackdurumi.anyarena.post.dto.PostDto
+import com.blackdurumi.anyarena.post.dto.PostLikerDto
+import com.blackdurumi.anyarena.post.dto.PostLikersDto
 import com.blackdurumi.anyarena.post.service.PostService
 import spock.lang.Specification
 
@@ -84,5 +86,66 @@ class PostApplicationTest extends Specification {
         1 * postService.updatePost(postId, modificationRequest) >> newPostDto
         result.getTitle() == newTitle
         result.getContent() == newContent
+    }
+
+    def "GetPostLikers"() {
+        given:
+        def likerId = 3L
+        def likerName = "liker"
+        def likerDto = PostLikerDto.builder()
+                .accountId(likerId)
+                .name(likerName)
+                .build()
+        def postLikersDto = PostLikersDto.builder()
+                .likers(Arrays.asList(likerDto))
+                .build()
+
+        when:
+        def result = sut.getPostLikers(postId)
+
+        then:
+        noExceptionThrown()
+        1 * postService.getPostLikersDto(postId) >> postLikersDto
+        result.getLikers().size() == 1
+        result.getLikers().get(0).getAccountId() == likerId
+        result.getLikers().get(0).getName() == likerName
+    }
+
+    def "LikeOrCancelPost - like"() {
+        given:
+        def likerId = 3L
+        def liker = Account.builder()
+                .accountId(likerId)
+                .build()
+
+        when:
+        def result = sut.likeOrCancelPost(likerId, postId)
+
+        then:
+        noExceptionThrown()
+        1 * postService.getPostLikers(postId) >> Arrays.asList()
+        1 * accountService.getById(likerId) >> liker
+        0 * postService.cancelLikePost(liker, postId) >> "cancel"
+        1 * postService.likePost(liker, postId) >> "success"
+        result == "success"
+    }
+
+    def "LikeOrCancelPost - cancel"() {
+        given:
+        def likerId = 3L
+        def liker = Account.builder()
+                .accountId(likerId)
+                .build()
+
+        when:
+        def result = sut.likeOrCancelPost(likerId, postId)
+
+        then:
+        noExceptionThrown()
+        1 * postService.getPostLikers(postId) >> Arrays.asList(liker)
+        1 * accountService.getById(likerId) >> liker
+        1 * postService.cancelLikePost(liker, postId) >> "cancel"
+        0 * postService.likePost(liker, postService) >> "success"
+        result == "cancel"
     }
 }

@@ -63,15 +63,15 @@ public class PostService {
         return PostDto.fromEntity(postRepository.save(post));
     }
 
-    public PostLikersDto getPostLikers(Long postId) {
-        Post post = getPost(postId);
+    public PostLikersDto getPostLikersDto(Long postId) {
         return PostLikersDto.builder()
-            .likers(getPostLikerEntities(postId).stream().map(PostLikerDto::fromEntity)
+            .postId(postId)
+            .likers(getPostLikers(postId).stream().map(PostLikerDto::fromEntity)
                 .collect(Collectors.toList()))
             .build();
     }
 
-    public List<Account> getPostLikerEntities(Long postId) {
+    public List<Account> getPostLikers(Long postId) {
         Post post = getPost(postId);
         return post.getLikers();
     }
@@ -80,15 +80,15 @@ public class PostService {
         Post post = getPost(postId);
         post.getLikers().add(account);
         postRepository.save(post);
-        return String.format("success to like post with postId: %d, accountId: %d",
-            postId, account.getAccountId());
+        return "success to like post with postId: " + postId + " by accountId: "
+            + account.getAccountId();
     }
 
     public String cancelLikePost(Account account, Long postId) {
         Post post = getPost(postId);
         post.getLikers().remove(account);
         postRepository.save(post);
-        return String.format("success to cancel like post with postId: %d, accountId: %d",
-            postId, account.getAccountId());
+        return "success to cancel like post with postId: " + postId + " by accountId: "
+            + account.getAccountId();
     }
 }

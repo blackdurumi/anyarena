@@ -8,5 +8,6 @@ import lombok.Data;
 @Builder
 public class PostLikersDto {
 
+    private Long postId;
     private List<PostLikerDto> likers;
 }

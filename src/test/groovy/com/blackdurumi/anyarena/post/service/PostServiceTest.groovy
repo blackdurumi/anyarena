@@ -125,4 +125,105 @@ class PostServiceTest extends Specification {
         result.getTitle() == newTitle
         result.getContent() == newContent
     }
+
+    def "GetPostLikersDto"() {
+        given:
+        def likerId = 3L
+        def liker = Account.builder()
+                .accountId(likerId)
+                .build()
+        def likers = [liker]
+        def postWithLikers = Post.builder()
+                .postId(postId)
+                .title(title)
+                .content(content)
+                .poster(account)
+                .likers(likers)
+                .build()
+
+        when:
+        def result = sut.getPostLikersDto(postId)
+
+        then:
+        noExceptionThrown()
+        1 * postRepository.findById(postId) >> Optional.of(postWithLikers)
+        result.getPostId() == postId
+        result.getLikers().size() == 1
+        result.getLikers().get(0).getAccountId() == likerId
+    }
+
+    def "GetPostLikers"() {
+        given:
+        def likerId = 3L
+        def liker = Account.builder()
+                .accountId(likerId)
+                .build()
+        def likers = [liker]
+        def postWithLikers = Post.builder()
+                .postId(postId)
+                .title(title)
+                .content(content)
+                .poster(account)
+                .likers(likers)
+                .build()
+
+        when:
+        def result = sut.getPostLikers(postId)
+
+        then:
+        noExceptionThrown()
+        1 * postRepository.findById(postId) >> Optional.of(postWithLikers)
+        result.size() == 1
+        result.get(0).getAccountId() == likerId
+    }
+
+    def "LikePost"() {
+        given:
+        def likerId = 3L
+        def liker = Account.builder()
+                .accountId(likerId)
+                .build()
+        def likers = [liker]
+        def postWithLikers = Post.builder()
+                .postId(postId)
+                .title(title)
+                .content(content)
+                .poster(account)
+                .likers(likers)
+                .build()
+
+        when:
+        def result = sut.likePost(liker, postId)
+
+        then:
+        noExceptionThrown()
+        1 * postRepository.findById(postId) >> Optional.of(postWithLikers)
+        1 * postRepository.save(_) >> postWithLikers
+        result == "success to like post with postId: " + postId + " by accountId: " + likerId
+    }
+
+    def "CancelLikePost"() {
+        given:
+        def likerId = 3L
+        def liker = Account.builder()
+                .accountId(likerId)
+                .build()
+        def likers = [liker]
+        def postWithLikers = Post.builder()
+                .postId(postId)
+                .title(title)
+                .content(content)
+                .poster(account)
+                .likers(likers)
+                .build()
+
+        when:
+        def result = sut.cancelLikePost(liker, postId)
+
+        then:
+        noExceptionThrown()
+        1 * postRepository.findById(postId) >> Optional.of(postWithLikers)
+        1 * postRepository.save(_) >> postWithLikers
+        result == "success to cancel like post with postId: " + postId + " by accountId: " + likerId
+    }
 }

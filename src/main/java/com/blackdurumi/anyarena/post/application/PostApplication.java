@@ -38,12 +38,12 @@ public class PostApplication {
     }
 
     public PostLikersDto getPostLikers(Long postId) {
-        return postService.getPostLikers(postId);
+        return postService.getPostLikersDto(postId);
     }
 
     @Transactional
     public String likeOrCancelPost(Long userId, Long postId) {
-        List<Account> likers = postService.getPostLikerEntities(postId);
+        List<Account> likers = postService.getPostLikers(postId);
         Account user = accountService.getById(userId);
 
         if (likers.contains(user)) {
