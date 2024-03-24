@@ -4,6 +4,7 @@ import com.blackdurumi.anyarena.account.entity.Account;
 import com.blackdurumi.anyarena.post.dao.PostRepository;
 import com.blackdurumi.anyarena.post.dto.PostCreationRequest;
 import com.blackdurumi.anyarena.post.dto.PostDto;
+import com.blackdurumi.anyarena.post.dto.PostLikersDto;
 import com.blackdurumi.anyarena.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,5 +58,28 @@ public class PostService {
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
         return PostDto.fromEntity(postRepository.save(post));
+    }
+
+    public PostLikersDto getPostLikers(Long postId) {
+        Post post = getPost(postId);
+        return PostLikersDto.builder()
+            .likers(post.getLikers())
+            .build();
+    }
+
+    public String likePost(Account account, Long postId) {
+        Post post = getPost(postId);
+        post.getLikers().add(account);
+        postRepository.save(post);
+        return String.format("success to like post with postId: %d, accountId: %d",
+            postId, account.getAccountId());
+    }
+
+    public String cancelLikePost(Account account, Long postId) {
+        Post post = getPost(postId);
+        post.getLikers().remove(account);
+        postRepository.save(post);
+        return String.format("success to cancel like post with postId: %d, accountId: %d",
+            postId, account.getAccountId());
     }
 }
