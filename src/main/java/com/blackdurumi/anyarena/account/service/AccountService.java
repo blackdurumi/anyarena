@@ -6,10 +6,12 @@ import com.blackdurumi.anyarena.account.entity.Account;
 import com.blackdurumi.anyarena.common.SecurityUtil;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountService {
 
     private final AccountRepository accountRepository;
@@ -37,5 +39,12 @@ public class AccountService {
     public Account getById(Long accountId) {
         return accountRepository.findById(accountId)
             .orElseThrow(() -> new RuntimeException("Account not found"));
+    }
+
+    public String deleteAccount(Long accountId) {
+        accountRepository.delete(getById(accountId));
+        String successMessage = "success to delete account with accountId: " + accountId;
+        log.info(successMessage);
+        return successMessage;
     }
 }

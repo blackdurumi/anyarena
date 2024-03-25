@@ -4,7 +4,11 @@ import com.blackdurumi.anyarena.account.entity.Account;
 import com.blackdurumi.anyarena.post.dao.PostRepository;
 import com.blackdurumi.anyarena.post.dto.PostCreationRequest;
 import com.blackdurumi.anyarena.post.dto.PostDto;
+import com.blackdurumi.anyarena.post.dto.PostLikerDto;
+import com.blackdurumi.anyarena.post.dto.PostLikersDto;
 import com.blackdurumi.anyarena.post.entity.Post;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,5 +54,41 @@ public class PostService {
         String successMessage = "success to delete post with postId: " + postId;
         log.info(successMessage);
         return successMessage;
+    }
+
+    public PostDto updatePost(Long postId, PostCreationRequest request) {
+        Post post = getPost(postId);
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        return PostDto.fromEntity(postRepository.save(post));
+    }
+
+    public PostLikersDto getPostLikersDto(Long postId) {
+        return PostLikersDto.builder()
+            .postId(postId)
+            .likers(getPostLikers(postId).stream().map(PostLikerDto::fromEntity)
+                .collect(Collectors.toList()))
+            .build();
+    }
+
+    public List<Account> getPostLikers(Long postId) {
+        Post post = getPost(postId);
+        return post.getLikers();
+    }
+
+    public String likePost(Account account, Long postId) {
+        Post post = getPost(postId);
+        post.getLikers().add(account);
+        postRepository.save(post);
+        return "success to like post with postId: " + postId + " by accountId: "
+            + account.getAccountId();
+    }
+
+    public String cancelLikePost(Account account, Long postId) {
+        Post post = getPost(postId);
+        post.getLikers().remove(account);
+        postRepository.save(post);
+        return "success to cancel like post with postId: " + postId + " by accountId: "
+            + account.getAccountId();
     }
 }
