@@ -36,7 +36,7 @@ public class PostService {
         return PostDto.fromEntity(post);
     }
 
-    private Post getPost(Long postId) {
+    public Post getPost(Long postId) {
         return postRepository.findById(postId)
             .orElseThrow(
                 () -> new IllegalArgumentException("Post not found with postId: " + postId));
